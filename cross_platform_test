@@ -1,0 +1,83 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+
+$:.unshift File.expand_path('../lib', __FILE__)
+require 'nstrct'
+
+mode = nil
+
+MIN = {
+  int8: (2**7)*-1,
+  int16: (2**15)*-1,
+  int32: (2**31)*-1,
+  int64: (2**63)*-1
+}
+
+MAX = {
+  uint8: (2**8)-1,
+  uint16: (2**16)-1,
+  uint32: (2**32)-1,
+  uint64: (2**64)-1,
+  float32: 3.4028234663852886*(10**38),
+  float64: 1.7976931348623157*(10**308)
+}
+
+def assert test, exp
+  unless exp
+    puts test
+    exit!
+  end
+end
+
+OptionParser.new do |opts|
+  opts.banner = 'Usage: cross_platform_test [options]'
+  opts.on('-p', '--process', 'process bytes at STDIN and return result') do |p|
+    mode = :process
+  end
+  opts.on('-g', '--generate', 'generate bytes and write to STDOUT') do |g|
+    mode = :generate
+  end
+end.parse!
+
+if mode == :generate
+  i = Nstrct::Instruction.build MAX[:uint16],
+    [:boolean, false],
+    [:int8, MIN[:int8]],
+    [:int16, MIN[:int16]],
+    [:int32, MIN[:int32]],
+    [:int64, MIN[:int64]],
+    [:uint8, MAX[:uint8]],
+    [:uint16, MAX[:uint16]],
+    [:uint32, MAX[:uint32]],
+    [:uint64, MAX[:uint64]],
+    [:float32, MAX[:float32]],
+    [:float64, MAX[:float64]],
+    [:string, 'hello world'],
+    [:string, ''],
+    [[:uint16], [2443, 3443]]
+  buf = i.pack
+  STDOUT.write [buf.size].pack('L>')
+  STDOUT.write buf
+elsif mode == :process
+  length = STDIN.read(4).unpack('L>')[0]
+  i = Nstrct::Instruction.parse(STDIN.read(length))
+  assert '    boolean value error', !i.arguments[0].value
+  assert '    int8 value error', i.arguments[1].value == MIN[:int8]
+  assert '    int16 value error', i.arguments[2].value == MIN[:int16]
+  assert '    int32 value error', i.arguments[3].value == MIN[:int32]
+  assert '    int64 value error', i.arguments[4].value == MIN[:int64]
+  assert '    uint8 value error', i.arguments[5].value == MAX[:uint8]
+  assert '    uint16 value error', i.arguments[6].value == MAX[:uint16]
+  assert '    uint32 value error', i.arguments[7].value == MAX[:uint32]
+  assert '    uint64 value error', i.arguments[8].value == MAX[:uint64]
+  assert '    float32 value error', i.arguments[9].value == MAX[:float32]
+  assert '    float64 value error', i.arguments[10].value == MAX[:float64]
+  assert '    string value error', i.arguments[11].value.eql?('hello world')
+  assert '    empty string value error', i.arguments[12].value.eql?('')
+  assert '    array uint16 value 1 error', i.arguments[13].value[0] == 2443
+  assert '    array uint16 value 2 error', i.arguments[13].value[1] == 3443
+  puts '    tests passed'
+else
+  puts 'please specify a run mode'
+end
