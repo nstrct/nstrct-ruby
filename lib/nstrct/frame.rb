@@ -4,6 +4,7 @@ module Nstrct
 
   class Frame
 
+    FRAME_OVERHEAD = 8
     FRAME_START = 85
     FRAME_END = 170
 
@@ -12,17 +13,27 @@ module Nstrct
     end
 
     def self.available? buffer
-      buffer.size >= 3 && buffer.size >= (buffer.slice(1..2).unpack('S>')[0]+6)
+      if buffer.size >= 1
+        raise 'start of frame invalid' unless buffer.slice(0).unpack('C')[0] == FRAME_START
+        if buffer.size >= 3
+          payload_length = buffer.slice(1..2).unpack('S>')[0]
+          if buffer.size >= (payload_length+FRAME_OVERHEAD)
+            raise 'end of frame invalid' unless buffer.slice(payload_length+FRAME_OVERHEAD-1).unpack('C')[0] == FRAME_END
+            return true
+          end
+        end
+      end
+      false
     end
 
     def self.parse buffer
       raise 'no frame available' unless self.available?(buffer)
-      raise 'start of frame invalid' unless buffer.slice!(0).unpack('C')[0] == FRAME_START
+      buffer.slice!(0) # remove start of frame
       length = buffer.slice!(0..1).unpack('S>')[0]
       payload = buffer.slice!(0..length-1)
       checksum = buffer.slice!(0..3).unpack('L>')[0]
+      buffer.slice!(0) # remove end of frame
       raise 'checksum invalid' unless checksum == crc32(payload)
-      raise 'end of frame invalid' unless buffer.slice!(0).unpack('C')[0] == FRAME_END
       self.new(Instruction.parse(payload))
     end
 
