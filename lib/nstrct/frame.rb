@@ -26,6 +26,8 @@ module Nstrct
       self.new(Instruction.parse(payload))
     end
 
+    attr_accessor :instruction
+
     def initialize instruction
       @instruction = instruction
     end
