@@ -5,8 +5,8 @@ module Nstrct
   class Frame
 
     FRAME_OVERHEAD = 8
-    FRAME_START = 85
-    FRAME_END = 170
+    FRAME_START = 0x55
+    FRAME_END = 0xAA
 
     def self.crc32 buffer
       Digest::CRC32.checksum buffer

@@ -56,12 +56,12 @@ if mode == :generate
     [:string, 'hello world'],
     [:string, ''],
     [[:uint16], [2443, 3443]]
-  buf = i.pack
+  buf = Nstrct::Frame.new(i).pack
   STDOUT.write [buf.size].pack('L>')
   STDOUT.write buf
 elsif mode == :process
   length = STDIN.read(4).unpack('L>')[0]
-  i = Nstrct::Instruction.parse(STDIN.read(length))
+  i = Nstrct::Frame.parse(STDIN.read(length)).instruction
   assert '    boolean value error', !i.arguments[0].value
   assert '    int8 value error', i.arguments[1].value == MIN[:int8]
   assert '    int16 value error', i.arguments[2].value == MIN[:int16]
