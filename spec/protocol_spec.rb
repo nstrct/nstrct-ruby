@@ -24,4 +24,31 @@ describe Nstrct::Frame do
     frame1.inspect.should == frame2.inspect
   end
 
+  describe 'errors' do
+
+    let(:frame) { Nstrct::Frame.new(Nstrct::Instruction.new(132, [])) }
+
+    it 'should raise start of frame invalid' do
+      expect{ Nstrct::Frame.parse('hello') }.to raise_error Nstrct::Frame::StartOfFrameInvalid
+    end
+
+    it 'should raise end of frame invalid' do
+      data = frame.pack
+      data[-1] = 'B'
+      expect{ Nstrct::Frame.parse(data) }.to raise_error Nstrct::Frame::EndOfFrameInvalid
+    end
+
+    it 'should raise no frame available' do
+      data = frame.pack.slice(-1..-4)
+      expect{ Nstrct::Frame.parse(data) }.to raise_error Nstrct::Frame::NoFrameAvailable
+    end
+
+    it 'should raise checksum invalid' do
+      data = frame.pack
+      data[-2] = 'C'
+      expect{ Nstrct::Frame.parse(data) }.to raise_error Nstrct::Frame::ChecksumInvalid
+    end
+
+  end
+
 end
