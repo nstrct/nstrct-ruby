@@ -86,30 +86,30 @@ module Nstrct
     def pack_value datatype, value, data
       case datatype
         when :boolean
-          data += [value ? 1 : 0].pack('C')
+          data += [value.to_i ? 1 : 0].pack('C')
         when :int8
-          data += [value].pack('c')
+          data += [value.to_i].pack('c')
         when :int16
-          data += [value].pack('s>')
+          data += [value.to_i].pack('s>')
         when :int32
-          data += [value].pack('l>')
+          data += [value.to_i].pack('l>')
         when :int64
-          data += [value].pack('q>')
+          data += [value.to_i].pack('q>')
         when :uint8
-          data += [value].pack('C')
+          data += [value.to_i].pack('C')
         when :uint16
-          data += [value].pack('S>')
+          data += [value.to_i].pack('S>')
         when :uint32
-          data += [value].pack('L>')
+          data += [value.to_i].pack('L>')
         when :uint64
-          data += [value].pack('Q>')
+          data += [value.to_i].pack('Q>')
         when :float32
-          data += [value].pack('g')
+          data += [value.to_f].pack('g')
         when :float64
-          data += [value].pack('G')
+          data += [value.to_f].pack('G')
         when :string
-          data += [value.size].pack('C')
-          data += value
+          data += [value.to_s.size].pack('C')
+          data += value.to_s
         when :array
           raise 'cannot pack array value directly'
         else
