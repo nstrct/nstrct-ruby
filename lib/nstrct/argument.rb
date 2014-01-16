@@ -86,7 +86,7 @@ module Nstrct
     def pack_value datatype, value, data
       case datatype
         when :boolean
-          data += [value.to_i ? 1 : 0].pack('C')
+          data += [to_boolean(value) ? 1 : 0].pack('C')
         when :int8
           data += [value.to_i].pack('c')
         when :int16
@@ -118,15 +118,26 @@ module Nstrct
       data
     end
 
+    def to_boolean(value)
+      return value if value.is_a?(TrueClass) || value.is_a?(FalseClass)
+      return Integer(value) >= 1
+    rescue
+      return value == 'true'
+    end
+
     # Pack a single argument in a buffer
     def pack
       data = ''
       if @array
         data += [DATATYPES[:array]].pack('C')
         data += [DATATYPES[@datatype]].pack('C')
-        data += [@value.size].pack('C')
-        @value.each do |val|
-          data = pack_value(@datatype, val, data)
+        if @value.is_a?(Array)
+          data += [@value.size].pack('C')
+          @value.each do |val|
+            data = pack_value(@datatype, val, data)
+          end
+        else
+          data += [0].pack('C')
         end
       else
         data += [DATATYPES[datatype]].pack('C')

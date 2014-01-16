@@ -44,7 +44,7 @@ module Nstrct
 
     # get all elements in arrays
     def array_elements
-      @arguments.inject(0){ |sum, a| sum + (a.array ? a.value.size : 0) }
+      @arguments.inject(0){ |sum, a| sum + (a.array ? a.value.is_a?(Array) ? a.value.size : 0 : 0) }
     end
 
     # Pack a single instruction in a buffer

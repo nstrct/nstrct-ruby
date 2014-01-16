@@ -1,5 +1,23 @@
 require 'spec_helper'
 
+describe Nstrct::Argument do
+
+  it 'should coerce string booleans' do
+    Nstrct::Argument.new(:boolean, 'true', false).pack.should == "\x01\x01"
+    Nstrct::Argument.new(:boolean, 'false', false).pack.should == "\x01\x00"
+    Nstrct::Argument.new(:boolean, true, false).pack.should == "\x01\x01"
+    Nstrct::Argument.new(:boolean, false, false).pack.should == "\x01\x00"
+    Nstrct::Argument.new(:boolean, 1, false).pack.should == "\x01\x01"
+    Nstrct::Argument.new(:boolean, 0, false).pack.should == "\x01\x00"
+    Nstrct::Argument.new(:boolean, 2, false).pack.should == "\x01\x01"
+  end
+
+  it 'should treat wrong arrays' do
+    Nstrct::Argument.new(:boolean, 'no-array-value', true).pack.should == " \x01\x00"
+  end
+
+end
+
 describe Nstrct::Instruction do
 
   it 'should pack and unpack an empty instruction' do
@@ -9,7 +27,7 @@ describe Nstrct::Instruction do
   end
 
   it 'should pack and unpack an instructionw with arguments' do
-    instruction1 = Nstrct::Instruction.build(232, [:float32, 1.0 ], [:boolean, true], [:int8, 2], [:float32, 1.0], [[:uint16], [54, 23, 1973]])
+    instruction1 = Nstrct::Instruction.build(232, [:float32, 1.0 ], [[:boolean], []], [:boolean, true], [:int8, 2], [:float32, 1.0], [[:uint16], [54, 23, 1973]])
     instruction2 = Nstrct::Instruction.parse(instruction1.pack)
     instruction1.inspect.should == instruction2.inspect
   end
