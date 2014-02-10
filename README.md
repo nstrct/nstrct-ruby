@@ -1,4 +1,4 @@
-# nstrct-ruby
+# nstrct-ruby [![Build Status](https://travis-ci.org/nstrct/nstrct-ruby.png?branch=master)](https://travis-ci.org/nstrct/nstrct-ruby) [![Code Climate](https://codeclimate.com/github/nstrct/nstrct-ruby.png)](https://codeclimate.com/github/nstrct/nstrct-ruby)
 
 **a multi-purpose binary protocol for instruction interchange**
 

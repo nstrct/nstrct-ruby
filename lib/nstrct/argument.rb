@@ -20,12 +20,12 @@ module Nstrct
     }
 
     # Get the datatype of a argument code
-    def self.datatype_by_for_argument_code code
-      DATATYPES.detect{ |k,v| v == code }[0]
+    def self.datatype_by_for_argument_code(code)
+      DATATYPES.detect { |k,v| v == code }[0]
     end
 
     # Parse a single value of a buffer
-    def self.parse_value datatype, data
+    def self.parse_value(datatype, data)
       case datatype
         when :boolean
           return data.slice!(0).unpack('C')[0] == 1
@@ -51,7 +51,7 @@ module Nstrct
           return data.slice!(0..7).unpack('G')[0]
         when :string
           length = data.slice!(0).unpack('C')[0]
-          return length > 0 ? data.slice!(0..length-1) : ''
+          return length > 0 ? data.slice!(0..length - 1) : ''
         when :array
           raise 'cannot parse array value directly'
         else
@@ -60,7 +60,7 @@ module Nstrct
     end
 
     # Parse a single argument from a buffer
-    def self.parse data
+    def self.parse(data)
       datatype = self.datatype_by_for_argument_code(data.slice!(0).unpack('C')[0])
       if datatype == :array
         array_datatype = self.datatype_by_for_argument_code(data.slice!(0).unpack('C')[0])
