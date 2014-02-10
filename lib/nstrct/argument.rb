@@ -21,7 +21,7 @@ module Nstrct
 
     # Get the datatype of a argument code
     def self.datatype_by_for_argument_code(code)
-      DATATYPES.detect { |k,v| v == code }[0]
+      DATATYPES.detect { |k, v| v == code }[0]
     end
 
     # Parse a single value of a buffer

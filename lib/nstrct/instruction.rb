@@ -5,7 +5,7 @@ module Nstrct
     attr_accessor :code, :arguments
 
     # Parse one message from the data stream.
-    def self.parse data
+    def self.parse(data)
       code = data.slice!(0..1).unpack('s>')[0]
       num_arguments = data.slice!(0).unpack('C')[0]
       data.slice!(0..1) # num_array_elements
