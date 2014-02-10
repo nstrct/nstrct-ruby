@@ -13,7 +13,7 @@ The protcol **nstrct** is designed to be an alternative in those situations wher
 * [Obj-C (nstrct-objc)](http://github.com/nstrct/nstrct-objc)
 * [Java (nstrct-c)](http://github.com/nstrct/nstrct-java)
 
-_This software has been open sourced by [ElectricFeel Mobility Systems Gmbh](http://electricfeel.com) and is further maintained by [Joël Gähwiler](http://github.com/256dpi)._
+_This software has been open sourced by [ElectricFeel Mobility Systems GmbH](http://electricfeel.com) and is further maintained by [Joël Gähwiler](http://github.com/256dpi)._
 
 ## Instruction Composing
 
