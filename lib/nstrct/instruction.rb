@@ -20,31 +20,30 @@ module Nstrct
     #
     #   Message.build_instruction 54, [ :boolean, true], [[:int8], [7, 8, 9]] ]
     #
-    def self.build code, *args
-      arguments = []
-      args.each do |arg|
+    def self.build(code, *args)
+      arguments = args.map do |arg|
         if arg[0].is_a?(Array)
-          arguments << Nstrct::Argument.new(arg[0][0], arg[1], true)
+          Nstrct::Argument.new(arg[0][0], arg[1], true)
         else
-          arguments << Nstrct::Argument.new(arg[0], arg[1], false)
+          Nstrct::Argument.new(arg[0], arg[1], false)
         end
       end
       self.new(code, arguments)
     end
 
     # Instantiate a new instruction by its code and alist of arguments
-    def initialize code, arguments=[]
+    def initialize(code, arguments = [])
       @code, @arguments = code, arguments
     end
 
     # Get all the arguments values
     def argument_values
-      @arguments.map{ |arg| arg.value }
+      @arguments.map { |arg| arg.value }
     end
 
     # get all elements in arrays
     def array_elements
-      @arguments.inject(0){ |sum, a| sum + (a.array ? a.value.is_a?(Array) ? a.value.size : 0 : 0) }
+      @arguments.inject(0) { |sum, a| sum + (a.array ? a.value.is_a?(Array) ? a.value.size : 0 : 0) }
     end
 
     # Pack a single instruction in a buffer
@@ -52,10 +51,7 @@ module Nstrct
       message = [@code].pack('s>')
       message += [@arguments.size].pack('C')
       message += [array_elements].pack('s>')
-      @arguments.each do |arg|
-        message += arg.pack
-      end
-      message
+      @arguments.inject(message) { |msg, arg| msg + arg.pack }
     end
 
     # Return a comparable inspection

@@ -13,17 +13,17 @@ module Nstrct
     FRAME_START = 0x55
     FRAME_END = 0xAA
 
-    def self.crc32 buffer
+    def self.crc32(buffer)
       Digest::CRC32.checksum buffer
     end
 
-    def self.available? buffer
+    def self.available?(buffer)
       if buffer.size >= 1
         raise StartOfFrameInvalid unless buffer.slice(0).unpack('C')[0] == FRAME_START
         if buffer.size >= 3
           payload_length = buffer.slice(1..2).unpack('S>')[0]
-          if buffer.size >= (payload_length+FRAME_OVERHEAD)
-            raise EndOfFrameInvalid unless buffer.slice(payload_length+FRAME_OVERHEAD-1).unpack('C')[0] == FRAME_END
+          if buffer.size >= (payload_length + FRAME_OVERHEAD)
+            raise EndOfFrameInvalid unless buffer.slice(payload_length + FRAME_OVERHEAD - 1).unpack('C')[0] == FRAME_END
             return true
           end
         end
@@ -35,7 +35,7 @@ module Nstrct
       raise NoFrameAvailable unless self.available?(buffer)
       buffer.slice!(0) # remove start of frame
       length = buffer.slice!(0..1).unpack('S>')[0]
-      payload = buffer.slice!(0..length-1)
+      payload = buffer.slice!(0..length - 1)
       checksum = buffer.slice!(0..3).unpack('L>')[0]
       buffer.slice!(0) # remove end of frame
       raise ChecksumInvalid unless checksum == crc32(payload)
