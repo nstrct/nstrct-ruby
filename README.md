@@ -1,4 +1,4 @@
-# nstrct-ruby
+# nstrct-ruby [![Build Status](https://travis-ci.org/nstrct/nstrct-ruby.png?branch=master)](https://travis-ci.org/nstrct/nstrct-ruby) [![Code Climate](https://codeclimate.com/github/nstrct/nstrct-ruby.png)](https://codeclimate.com/github/nstrct/nstrct-ruby)
 
 **a multi-purpose binary protocol for instruction interchange**
 
@@ -13,7 +13,7 @@ The protcol **nstrct** is designed to be an alternative in those situations wher
 * [Obj-C (nstrct-objc)](http://github.com/nstrct/nstrct-objc)
 * [Java (nstrct-c)](http://github.com/nstrct/nstrct-java)
 
-_This software has been open sourced by [ElectricFeel Mobility Systems Gmbh](http://electricfeel.com) and is further maintained by [Joël Gähwiler](http://github.com/256dpi)._
+_This software has been open sourced by [ElectricFeel Mobility Systems GmbH](http://electricfeel.com) and is further maintained by [Joël Gähwiler](http://github.com/256dpi)._
 
 ## Instruction Composing
 
