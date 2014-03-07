@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nstrct (0.1.4)
+    nstrct (0.1.5)
       digest-crc
 
 GEM
