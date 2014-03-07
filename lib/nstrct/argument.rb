@@ -79,7 +79,7 @@ module Nstrct
 
     # Instantiate a new Argument providing its datatype, value and arrayness
     def initialize datatype, value, array
-      @datatype, @value, @array = datatype, value, array
+      @datatype, @value, @array = datatype.to_sym, value, array
     end
 
     # Pack a single value in a buffer

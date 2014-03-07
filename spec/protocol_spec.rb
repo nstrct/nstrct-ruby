@@ -12,6 +12,10 @@ describe Nstrct::Argument do
     Nstrct::Argument.new(:boolean, 2, false).pack.should == "\x01\x01"
   end
 
+  it 'should allow string datatypes' do
+    Nstrct::Argument.new('boolean', 2, false).pack.should == "\x01\x01"
+  end
+
   it 'should treat wrong arrays' do
     Nstrct::Argument.new(:boolean, 'no-array-value', true).pack.should == " \x01\x00"
   end
