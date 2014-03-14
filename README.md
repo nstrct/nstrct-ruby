@@ -27,7 +27,7 @@ bytes = instruction.pack
 A more complex example:
 
 ```ruby
-instruction = Nstrct::Instruction.build_instruction(232, [:boolean, true], [:int8, 2], [:float32, 1.0], [[:uint16], [54, 23, 1973]])
+instruction = Nstrct::Instruction.build_instruction(232, [:boolean, true], [:int8, 2], [:float32, 1.0], [:uint16, [54, 23, 1973]])
 instruction.pack
 ```
 

@@ -18,12 +18,12 @@ module Nstrct
 
     # Build an instruction for a code and some arguments.
     #
-    #   Message.build_instruction 54, [ :boolean, true], [[:int8], [7, 8, 9]] ]
+    #   Message.build_instruction 54, [:int8, [7, 8, 9]]
     #
     def self.build(code, *args)
       arguments = args.map do |arg|
-        if arg[0].is_a?(Array)
-          Nstrct::Argument.new(arg[0][0], arg[1], true)
+        if arg[1].is_a?(Array)
+          Nstrct::Argument.new(arg[0], arg[1], true)
         else
           Nstrct::Argument.new(arg[0], arg[1], false)
         end

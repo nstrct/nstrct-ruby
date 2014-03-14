@@ -31,7 +31,7 @@ describe Nstrct::Instruction do
   end
 
   it 'should pack and unpack an instructionw with arguments' do
-    instruction1 = Nstrct::Instruction.build(232, [:float32, 1.0 ], [[:boolean], []], [:boolean, true], [:int8, 2], [:float32, 1.0], [[:uint16], [54, 23, 1973]])
+    instruction1 = Nstrct::Instruction.build(232, [:float32, 1.0 ], [:boolean, []], [:boolean, true], [:int8, 2], [:float32, 1.0], [:uint16, [54, 23, 1973]])
     instruction2 = Nstrct::Instruction.parse(instruction1.pack)
     expect(instruction1.inspect).to eq(instruction2.inspect)
   end
